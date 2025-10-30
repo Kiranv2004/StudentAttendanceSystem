@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration - Face Recognition Attendance System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Subtle background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .main-container {
+            padding: 30px 20px;
+            max-width: 1300px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Back Button - High Contrast */
+        .back-button {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            background: #1e40af;
+            color: #ffffff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            transition: all 0.2s ease;
+            z-index: 3000;
+            box-shadow: 0 6px 16px rgba(30, 64, 175, 0.35);
+        }
+        
+        .back-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(29, 78, 216, 0.4);
+            color: #ffffff;
+        }
+        
+        .back-button i {
+            margin-right: 8px;
+        }
+        
+        /* Header - Clean & Professional */
+        .header-section {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 16px;
+            padding: 28px 32px;
+            text-align: center;
+            margin-bottom: 28px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(30, 64, 175, 0.18);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .header-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin: 10px 0;
+            color: white;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin-top: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+        
+        /* Card Styles - Modern Glassmorphism */
+        .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 
+                0 8px 32px rgba(31, 38, 135, 0.15),
+                0 2px 8px rgba(31, 38, 135, 0.05);
+            margin-bottom: 30px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .main-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .main-card:hover {
+            box-shadow: 
+                0 20px 60px rgba(102, 126, 234, 0.2),
+                0 8px 24px rgba(102, 126, 234, 0.1);
+            transform: translateY(-8px);
+        }
+        
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f3f4f6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .card-icon {
+            font-size: 28px;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 12px;
+        }
+        
+        /* Camera Section */
+        .camera-preview {
+            width: 100%;
+            height: 250px;
+            max-height: 250px;
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f9fafb;
+            overflow: hidden !important; /* Force hidden overflow */
+            position: relative; /* For positioning elements inside */
+            max-width: 100%; /* Ensure container doesn't exceed parent width */
+            box-sizing: border-box; /* Include border in width calculation */
+        }
+        
+        .camera-placeholder {
+            text-align: center;
+            color: #6b7280;
+            padding: 20px;
+            z-index: 1;
+        }
+        
+        #video {
+            width: 100% !important;
+            height: auto !important;
+            max-height: 250px !important;
+            object-fit: contain !important; /* Changed to contain to prevent overflow */
+            max-width: 100% !important; /* Ensure video doesn't overflow */
+            border-radius: 10px; /* Match container border radius */
+            z-index: 2;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+        }
+        
+        .captured-image {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f9fafb;
+            z-index: 3;
+        }
+        
+        .captured-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Keep image within bounds */
+            border-radius: 10px;
+        }
+        
+        /* Ensure camera preview section is properly contained */
+        .camera-preview-section {
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden !important;
+            position: relative;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        
+        .camera-preview-section .camera-preview {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        
+        /* Video element styling */
+        #video {
+            border-radius: 10px;
+            background-color: #000;
+        }
+        
+        /* Camera Buttons - Modern & Professional */
+        .btn-camera, .btn-upload {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 28px;
+            font-weight: 600;
+            font-size: 15px;
+            margin: 5px;
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: 100 !important;
+            min-width: 150px;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+            overflow: hidden;
+        }
+
+        .btn-camera::before, .btn-upload::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-camera:hover::before, .btn-upload:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-camera:hover, .btn-upload:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+            color: white;
+            cursor: pointer;
+        }
+
+        .btn-camera:active, .btn-upload:active {
+            transform: translateY(-1px);
+        }
+        
+        /* Fix button container to ensure buttons are clickable */
+        .button-container {
+            position: relative;
+            z-index: 200 !important;
+            margin-top: 15px;
+        }
+        
+        /* Form Styles */
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        
+        .form-label i {
+            color: #3b82f6;
+            font-size: 18px;
+            width: 20px;
+        }
+        
+        .form-control, .form-select {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #fff;
+            color: #1f2937;
+        }
+
+        .form-control:hover, .form-select:hover {
+            border-color: #3b82f6;
+            background: #fafbff;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+            outline: none;
+            background: #fff;
+        }
+        
+        .required {
+            color: #ef4444;
+            font-weight: 700;
+        }
+        
+        /* Register Button */
+        .btn-register {
+            background: #3b82f6;
+            color: white;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            margin-top: 20px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-register::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-register:hover::before {
+            left: 100%;
+        }
+        
+        .btn-register:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+            color: white;
+        }
+
+        .btn-register:active {
+            transform: translateY(0);
+        }
+        
+        /* Tips Box */
+        .tips-box {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .tips-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .tips-title i {
+            color: #f59e0b;
+        }
+        
+        .tips-list {
+            margin: 0;
+            padding-left: 20px;
+            color: #92400e;
+        }
+        
+        .tips-list li {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        /* Beautiful Success Message */
+        .success-message-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .success-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s ease;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: scaleIn 0.5s ease;
+        }
+
+        .success-icon i {
+            font-size: 50px;
+            color: white;
+            animation: checkMark 0.6s ease 0.3s both;
+        }
+
+        .success-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .success-student-name {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        .close-success-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+        }
+
+        .close-success-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes checkMark {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        /* Nicer inline alerts placed under the header */
+        .elegant-alert {
+            max-width: 900px;
+            margin: 0 auto 20px auto;
+            border-left: 6px solid #10b981; /* green accent */
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            background: rgba(16, 185, 129, 0.12); /* subtle green */
+            color: #065f46;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Back Button -->
+        <a href="/" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+        
+        <!-- Header -->
+        <div class="header-section">
+            <div class="header-icon">🎓</div>
+            <h1 class="header-title">Student Registration</h1>
+            <p class="header-subtitle">Register new students with face recognition</p>
+        </div>
+
+        <!-- Flash messages placed under header -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ "success" if category == "success" else "danger" if category == "danger" else "info" }} elegant-alert alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="row g-4">
+            <!-- Photo Capture Section -->
+            <div class="col-lg-6">
+                <div class="main-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-camera card-icon"></i>
+                        Capture Photo
+                    </h3>
+            
+                    <div class="camera-preview-section">
+                        <div class="camera-preview" id="camera-preview">
+                            <div class="camera-placeholder">
+                                <p>Camera preview will appear here</p>
+                            </div>
+                            <video id="video" style="display: none;" autoplay playsinline></video>
+                            <canvas id="canvas" style="display: none;"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-3 button-container">
+                        <button id="startCameraBtn" class="btn btn-camera">
+                            <i class="fas fa-video me-2"></i>Start Camera
+                        </button>
+                        <button id="capturePhotoBtn" class="btn btn-camera" style="display: none;">
+                            <i class="fas fa-camera me-2"></i>Capture Photo
+                        </button>
+                    </div>
+                    
+                    <div class="text-center mt-3 button-container">
+                        <p class="mb-2"> Or Upload Image</p>
+                        <button id="chooseFileBtn" class="btn btn-upload">
+                            <i class="fas fa-upload me-2"></i>Choose Image File
+                        </button>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                        <p class="text-muted mt-2" style="font-size: 12px;">Supported formats: JPG, PNG, GIF (Max 5MB)</p>
+                    </div>
+                    
+                    <!-- Tips Box -->
+                    <div class="tips-box">
+                        <div class="tips-title">
+                            <i class="fas fa-lightbulb"></i>
+                            Photo Tips for Better Face Detection:
+                        </div>
+                        <ul class="tips-list">
+                            <li>Ensure good lighting (natural light is best)</li>
+                            <li>Face should be clearly visible and front-facing</li>
+                            <li>Avoid shadows on your face</li>
+                            <li>Remove sunglasses or hats</li>
+                            <li>Use a high-quality image (not blurry)</li>
+                            <li>Face should take up at least 30% of the image</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Information Form -->
+            <div class="col-lg-6">
+                <div class="main-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-user card-icon"></i>
+                        Student Information
+                    </h3>
+            
+                    <form id="registrationForm" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-user"></i>
+                                Full Name <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-control" name="name" placeholder="Enter full name" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-id-card"></i>
+                                Student ID <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-control" name="usn" placeholder="E.g., 1VE22CS070" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-code-branch"></i>
+                                Branch <span class="required">*</span>
+                            </label>
+                            <select class="form-select" name="branch" required>
+                                <option value="">Select Branch</option>
+                                <option value="CSE">Computer Science & Engineering</option>
+                                <option value="ECE">Electronics & Communication</option>
+                                <option value="EEE">Electrical & Electronics</option>
+                                <option value="ME">Mechanical Engineering</option>
+                                <option value="CE">Civil Engineering</option>
+                                <option value="IT">Information Science & Engineering</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-calendar"></i>
+                                Semester <span class="required">*</span>
+                            </label>
+                            <select class="form-select" name="semester" required>
+                                <option value="">Select Semester</option>
+                                <option value="1">1st Semester</option>
+                                <option value="2">2nd Semester</option>
+                                <option value="3">3rd Semester</option>
+                                <option value="4">4th Semester</option>
+                                <option value="5">5th Semester</option>
+                                <option value="6">6th Semester</option>
+                                <option value="7">7th Semester</option>
+                                <option value="8">8th Semester</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-users"></i>
+                                Section <span class="required">*</span>
+                            </label>
+                            <select class="form-select" name="section" required>
+                                <option value="">Select Section</option>
+                                <option value="A">Section A</option>
+                                <option value="B">Section B</option>
+                                <option value="C">Section C</option>
+                                <option value="D">Section D</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-phone"></i>
+                                Phone Number <span class="required">*</span>
+                            </label>
+                            <input type="tel" class="form-control" name="phone" placeholder="E.g., +919110655575" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Address
+                            </label>
+                            <textarea class="form-control" name="address" rows="3" placeholder="Student's address (optional)"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-register">
+                            <i class="fas fa-user-plus me-2"></i>Register Student
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Variables
+        let currentStream = null;
+        let capturedImages = [];
+        const maxImages = 1;
+        
+        // DOM Elements
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        const startCameraBtn = document.getElementById("startCameraBtn");
+        const capturePhotoBtn = document.getElementById("capturePhotoBtn");
+        const chooseFileBtn = document.getElementById("chooseFileBtn");
+        const fileInput = document.getElementById("fileInput");
+        const cameraPreview = document.getElementById("camera-preview");
+        
+        // Start Camera
+        function startCamera() {
+            if (currentStream) {
+                console.log("Camera already started");
+                return;
+            }
+            
+            // Camera constraints
+            const constraints = {
+                video: {
+                    width: { ideal: 640 },
+                    height: { ideal: 480 },
+                    facingMode: "user"
+                }
+            };
+            
+            // Request camera access
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(function(stream) {
+                    // Store stream for later stopping
+                    currentStream = stream;
+                    
+                    // Set as video source
+                    video.srcObject = stream;
+                    video.play();
+                    
+                    // Hide placeholder, show video
+                    const placeholder = cameraPreview.querySelector(".camera-placeholder");
+                    if (placeholder) placeholder.style.display = "none";
+                    video.style.display = "block";
+                    
+                    // Configure video element styling - FIXED to prevent overflow
+                    video.style.width = "100%";
+                    video.style.height = "auto";
+                    video.style.maxHeight = "250px";
+                    video.style.objectFit = "contain";
+                    video.style.maxWidth = "100%";
+                    video.style.borderRadius = "10px";
+                    video.style.position = "absolute";
+                    video.style.top = "0";
+                    video.style.left = "0";
+                    video.style.zIndex = "2";
+                    
+                    // Update buttons
+                    startCameraBtn.innerHTML = '<i class="fas fa-video-slash me-2"></i>Stop Camera';
+                    startCameraBtn.classList.add("camera-active");
+                    capturePhotoBtn.style.display = "inline-block";
+                    
+                    console.log("Camera started successfully");
+                })
+                .catch(function(err) {
+                    console.error("Camera error:", err);
+                    alert("Unable to access camera: " + err.message);
+                });
+        }
+        
+        // Stop Camera
+        function stopCamera() {
+            if (!currentStream) return;
+            
+            // Stop all tracks
+            try {
+                currentStream.getTracks().forEach(track => {
+                    track.stop();
+                });
+                
+                // Clear video source
+                video.srcObject = null;
+                currentStream = null;
+                
+                // Show placeholder, hide video
+                const placeholder = cameraPreview.querySelector(".camera-placeholder");
+                if (placeholder) placeholder.style.display = "block";
+                video.style.display = "none";
+                
+                // Reset buttons
+                startCameraBtn.innerHTML = '<i class="fas fa-video me-2"></i>Start Camera';
+                startCameraBtn.classList.remove("camera-active");
+                capturePhotoBtn.style.display = "none";
+                
+                // Reset video styling
+                video.style.position = "";
+                video.style.top = "";
+                video.style.left = "";
+                video.style.zIndex = "";
+                video.style.maxHeight = "";
+                
+                console.log("Camera stopped successfully");
+            } catch (err) {
+                console.error("Error stopping camera:", err);
+            }
+        }
+        
+        // Toggle camera
+        function toggleCamera() {
+            if (currentStream) {
+                stopCamera();
+            } else {
+                startCamera();
+            }
+        }
+        
+        // Capture photo
+        function capturePhoto() {
+            if (!currentStream || !video.videoWidth) {
+                console.error("No camera stream available");
+                return;
+            }
+            
+            // Set canvas dimensions
+            const maxDimension = 640;
+            let width = video.videoWidth;
+            let height = video.videoHeight;
+            
+            // Scale down if too large
+            if (width > maxDimension || height > maxDimension) {
+                const scaleFactor = maxDimension / Math.max(width, height);
+                width *= scaleFactor;
+                height *= scaleFactor;
+            }
+            
+            // Set canvas size and draw video frame
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(video, 0, 0, width, height);
+            
+            // Convert to JPEG
+            const imageData = canvas.toDataURL("image/jpeg", 0.85);
+            capturedImages.push(imageData);
+            
+            // Display the captured image
+            showCapturedImage(imageData);
+            
+            // Stop camera
+            stopCamera();
+            
+            console.log("Photo captured successfully");
+        }
+        
+        // Show captured image
+        function showCapturedImage(imageData) {
+            // Remove any existing captured image
+            const existingImage = cameraPreview.querySelector(".captured-image");
+            if (existingImage) {
+                existingImage.remove();
+            }
+            
+            // Hide placeholder
+            const placeholder = cameraPreview.querySelector(".camera-placeholder");
+            if (placeholder) {
+                placeholder.style.display = "none";
+            }
+            
+            // Create new image container
+            const capturedImg = document.createElement("div");
+            capturedImg.className = "captured-image";
+            
+            // Add image and delete button
+            capturedImg.innerHTML = `
+                <img src="${imageData}" alt="Captured photo">
+                <button onclick="deleteCapturedImage()" class="btn btn-danger btn-sm" style="position: absolute; top: 10px; right: 10px; z-index: 5;">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            
+            // Add to preview
+            cameraPreview.appendChild(capturedImg);
+        }
+        
+        // Delete captured image
+        function deleteCapturedImage() {
+            capturedImages = [];
+            
+            // Remove captured image element
+            const capturedImg = cameraPreview.querySelector(".captured-image");
+            if (capturedImg) {
+                capturedImg.remove();
+            }
+            
+            // Show placeholder
+            const placeholder = cameraPreview.querySelector(".camera-placeholder");
+            if (placeholder) {
+                placeholder.style.display = "block";
+            }
+            
+            console.log("Captured image deleted");
+        }
+        
+        // Process file upload
+        function processFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Check file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert("File size must be less than 5MB");
+                return;
+            }
+            
+            // Read file
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                capturedImages.push(e.target.result);
+                showCapturedImage(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // Function to show beautiful success modal
+        function showSuccessModal(studentName) {
+            // Create modal HTML
+            const modalHTML = `
+                <div class="success-message-container" id="successModal">
+                    <div class="success-card">
+                        <div class="success-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h2 class="success-title">Registration Successful!</h2>
+                        <p class="success-message">
+                            <span class="success-student-name">${studentName}</span> has been successfully registered to the system.
+                        </p>
+                        <button class="close-success-btn" onclick="closeSuccessModal()">
+                            <i class="fas fa-check me-2"></i>Continue
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add modal to body
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            // Close modal on background click
+            document.getElementById('successModal').addEventListener('click', function(e) {
+                if (e.target.id === 'successModal') {
+                    closeSuccessModal();
+                }
+            });
+        }
+
+        // Function to close success modal
+        function closeSuccessModal() {
+            const modal = document.getElementById('successModal');
+            if (modal) {
+                modal.style.animation = 'fadeIn 0.3s ease reverse';
+                setTimeout(() => {
+                    modal.remove();
+                }, 300);
+            }
+        }
+
+        // Form submission
+        function submitForm(e) {
+            e.preventDefault();
+            
+            // Check if photo is captured/uploaded
+            if (capturedImages.length === 0) {
+                alert("Please capture or upload a photo before registering.");
+                return;
+            }
+            
+            // Prepare form data
+            const form = document.getElementById("registrationForm");
+            const formData = new FormData(form);
+            
+            // Add images to form data
+            capturedImages.forEach((imageData, index) => {
+                formData.append("photo_" + index, imageData);
+            });
+            
+            // Update button state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Registering...';
+            submitBtn.disabled = true;
+            
+            // Submit form
+            fetch("/registration", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => {
+                // Treat any 2xx as success and show inline success alert
+                if (!response.ok) {
+                    throw new Error('Registration failed');
+                }
+                return response.text();
+            })
+            .then(() => {
+                // Get student name
+                const nameInput = form.querySelector('input[name="name"]');
+                const studentName = nameInput ? nameInput.value : 'Student';
+                
+                // Show beautiful success modal
+                showSuccessModal(studentName);
+                
+                // Reset form and UI
+                form.reset();
+                deleteCapturedImage();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            })
+            .catch(error => {
+                console.error("Registration error:", error);
+                alert("An error occurred during registration. Please try again.");
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
+        }
+        
+        // Set up event listeners
+        document.addEventListener("DOMContentLoaded", function() {
+            // Camera controls
+            startCameraBtn.addEventListener("click", toggleCamera);
+            capturePhotoBtn.addEventListener("click", capturePhoto);
+            
+            // File upload
+            chooseFileBtn.addEventListener("click", () => fileInput.click());
+            fileInput.addEventListener("change", processFileUpload);
+            
+            // Form submission
+            document.getElementById("registrationForm").addEventListener("submit", submitForm);
+        });
+    </script>
+</body>
+</html>
